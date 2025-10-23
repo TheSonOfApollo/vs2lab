@@ -11,11 +11,13 @@ ipython = "*"
 jupyter = "*"
 jupyter_server = "*"
 ipyparallel = "*"
+ipynb = "*"
 
 [dev-packages]
 pylint = "*"
 "autopep8" = "*"
 rope = "*"
+ipykernel = "*"
 
 [requires]
 python_version = "3"
