@@ -4,6 +4,7 @@ Client and server using classes
 
 import logging
 import socket
+from database import phoneNumbers
 
 import const_cs
 from context import lab_logging
@@ -23,24 +24,56 @@ class Server:
         self.sock.bind((const_cs.HOST, const_cs.PORT))
         self.sock.settimeout(3)  # time out in order not to block forever
         self._logger.info("Server bound to socket " + str(self.sock))
+        self._logger.info("Server initialized correctly!")
 
-    def serve(self):
-        """ Serve echo """
+
+    # def serve(self):
+    #     greeting = "Hello this is the server talking"
+    #     """ Serve echo """
+    #     self.sock.listen(1)
+    #     while self._serving:  # as long as _serving (checked after connections or socket timeouts)
+    #         try:
+    #             # pylint: disable=unused-variable
+    #             (connection, address) = self.sock.accept()  # returns new socket and address of client
+    #             self._logger.info("Connection succes!") #debbuging message
+    #             connection.send(greeting.encode('ascii'))
+    #             self._logger.info("Greeting sent succesfully") #debbuging message
+    #             while True:  # forever
+    #                 data = connection.recv(1024)  # receive data from client
+    #                 if not data:
+    #                     break  # stop if client stopped
+    #                 connection.send(data + "*".encode('ascii'))  # return sent data plus an "*"
+    #                 self._logger.info("Echo complete")
+    #             connection.close()  # close the connection
+    #         except socket.timeout:
+    #             pass  # ignore timeouts
+    #     self.sock.close()
+    #     self._logger.info("Server down.")
+
+
+    def handler(self): 
         self.sock.listen(1)
-        while self._serving:  # as long as _serving (checked after connections or socket timeouts)
+        while self._serving: 
             try:
-                # pylint: disable=unused-variable
-                (connection, address) = self.sock.accept()  # returns new socket and address of client
-                while True:  # forever
-                    data = connection.recv(1024)  # receive data from client
-                    if not data:
-                        break  # stop if client stopped
-                    connection.send(data + "*".encode('ascii'))  # return sent data plus an "*"
-                connection.close()  # close the connection
+                (connection, adress) = self.sock.accept()
+                self._logger.info("Connection established")
+                while True: 
+                    data = connection.recv(1024)
+                    if not data: 
+                        break
+                    decodedData = data.decode('ascii')
+                    decodedData.replace("b", "", 1) # remove "b" leftover from en-/decoding
+                    self._logger.info("Decoding received message")
+                    info = phoneNumbers[decodedData]
+                    self._logger.info("Encoding...")
+                    connection.send((decodedData + " : " + info).encode('ascii')) 
+                    self._logger.info("Sending info back!")
+                connection.close()
             except socket.timeout:
-                pass  # ignore timeouts
+                pass
         self.sock.close()
-        self._logger.info("Server down.")
+        self._logger.info("Connection closed")
+                    
 
 
 class Client:
@@ -52,16 +85,36 @@ class Client:
         self.sock.connect((const_cs.HOST, const_cs.PORT))
         self.logger.info("Client connected to socket " + str(self.sock))
 
-    def call(self, msg_in="Hello, world"):
-        """ Call server """
-        self.sock.send(msg_in.encode('ascii'))  # send encoded string as data
-        data = self.sock.recv(1024)  # receive the response
-        msg_out = data.decode('ascii')
-        print(msg_out)  # print the result
-        self.sock.close()  # close the connection
-        self.logger.info("Client down.")
-        return msg_out
+
+    # def call(self, msg_in="Hello, world"):
+    #     #recGreeting = self.sock.recv('ascii')
+    #     #print(recGreeting)
+    #     """ Call server """
+    #     self.sock.send(msg_in.encode('ascii'))  # send encoded string as data
+    #     data = self.sock.recv(1024)  # receive the response
+    #     msg_out = data.decode('ascii')
+    #     print(msg_out)  # print the result
+    #     #self.sock.close()  # close the connection
+    #     return msg_out
+
 
     def close(self):
         """ Close socket """
+        self.logger.info("Client down.")
         self.sock.close()
+
+    def get(self, name):
+        self.sock.send(name.encode('ascii')) #send reqested name
+        self.logger.info("Sent name: " + name) 
+        self.logger.info(name.encode('ascii')) # debbuging message, delete later
+        info = self.sock.recv(1024)
+        self.logger.info("Information received, decoding...")
+        info_out = info.decode('ascii')
+        print(info_out)
+        return(info_out) 
+         
+    # def first(self):
+    #     recGreeting = self.sock.recv(1024) #recv parameter = number of characters, here 1024 characters!
+    #     decoded = recGreeting.decode('ascii')
+    #     print(decoded)
+    #     return(decoded)
