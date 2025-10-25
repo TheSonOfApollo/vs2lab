@@ -104,15 +104,19 @@ class Client:
         self.logger.info("Client down.")
         self.sock.close()
 
-    def get(self, name):
-        self.sock.send(name.encode('ascii')) #send reqested name
-        self.logger.info("Sent name: " + name) 
-        self.logger.info(name.encode('ascii')) # debbuging message, delete later
-        info = self.sock.recv(1024)
-        self.logger.info("Information received, decoding...")
-        info_out = info.decode('ascii')
-        print(info_out)
-        return(info_out) 
+    def get(self, name = ""):
+        if not str(name).isalpha():
+            self.logger.info("Invalid request, parameter isn't alphanumeric")
+            return("Please use only letters from the alphabet!")
+        else: 
+            self.sock.send(name.encode('ascii')) #send reqested name
+            self.logger.info("Sent name: " + name) 
+            self.logger.info(name.encode('ascii')) # debbuging message, delete later
+            info = self.sock.recv(1024)
+            self.logger.info("Information received, decoding...")
+            info_out = info.decode('ascii')
+            print(info_out)
+            return(info_out) 
          
     # def first(self):
     #     recGreeting = self.sock.recv(1024) #recv parameter = number of characters, here 1024 characters!
