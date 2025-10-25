@@ -65,10 +65,15 @@ class Server:
                     decodedData.replace("b", "", 1) # remove "b" leftover from en-/decoding
                     decodedData = decodedData.capitalize() # capitalize key so there are no key conflicts
                     self._logger.info("Decoding received message")
-                    info = phoneNumbers[decodedData]
-                    self._logger.info("Encoding...")
-                    connection.send((decodedData + " : " + info).encode('ascii')) 
-                    self._logger.info("Sending info back!")
+                    try: 
+                        info = phoneNumbers[decodedData]
+                    except:
+                        info = "no entry found"
+                        self._logger.info("Key not found!")
+                    finally: 
+                        self._logger.info("Encoding...")
+                        connection.send((decodedData + " : " + info).encode('ascii')) 
+                        self._logger.info("Sending info back!")
                 connection.close()
             except socket.timeout:
                 pass
@@ -107,7 +112,8 @@ class Client:
     def get(self, name = ""):
         if not str(name).isalpha():
             self.logger.info("Invalid request, parameter isn't alphanumeric")
-            return("Please use only letters from the alphabet!")
+            print("This is an invalid request --> '" + str(name) + "'")
+            print("Please use only letters from the alphabet!")
         else: 
             self.sock.send(name.encode('ascii')) #send reqested name
             self.logger.info("Sent name: " + name) 
