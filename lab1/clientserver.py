@@ -62,6 +62,7 @@ class Server:
                     if not data: 
                         break
                     decodedData = data.decode("ascii")
+                    self._logger.info("Decoding received message")
                     decodedData.replace("b", "", 1) # remove "b" leftover from en-/decoding
                     if decodedData == "---GET_ALL---": 
                         self.handleAll(connection)
@@ -76,7 +77,6 @@ class Server:
 
     def handleGet(self, key, connection):
         key = key.capitalize() # capitalize key so there are no key conflicts
-        self._logger.info("Decoding received message")
         try: 
             info = phoneNumbers[key]
         except:
