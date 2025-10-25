@@ -123,6 +123,19 @@ class Client:
             info_out = info.decode("ascii")
             print(info_out)
             return(info_out) 
+
+    def getAll(self): 
+        command = "---GET_ALL---"
+        info = ""
+        self.sock.send(command.encode("ascii")) 
+        self.logger.info("Requesting ALL contacts...")
+        while info != "---FINISHED---": 
+            info = self.sock.recv(1024)
+            info_out = info.decode("ascii")
+            print(info_out)
+        self.logger.info("All contacts received succesflully")
+        print("All contacts received succesflully")
+        
          
     # def first(self):
     #     recGreeting = self.sock.recv(1024) #recv parameter = number of characters, here 1024 characters!
