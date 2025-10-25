@@ -61,7 +61,7 @@ class Server:
                     data = connection.recv(1024)
                     if not data: 
                         break
-                    decodedData = data.decode('ascii')
+                    decodedData = data.decode("ascii")
                     decodedData.replace("b", "", 1) # remove "b" leftover from en-/decoding
                     decodedData = decodedData.capitalize() # capitalize key so there are no key conflicts
                     self._logger.info("Decoding received message")
@@ -72,7 +72,7 @@ class Server:
                         self._logger.info("Key not found!")
                     finally: 
                         self._logger.info("Encoding...")
-                        connection.send((decodedData + " : " + info).encode('ascii')) 
+                        connection.send((decodedData + " : " + info).encode("ascii")) 
                         self._logger.info("Sending info back!")
                 connection.close()
             except socket.timeout:
@@ -115,12 +115,12 @@ class Client:
             print("This is an invalid request --> '" + str(name) + "'")
             print("Please use only letters from the alphabet!")
         else: 
-            self.sock.send(name.encode('ascii')) #send reqested name
+            self.sock.send(name.encode("ascii")) #send reqested name
             self.logger.info("Sent name: " + name) 
-            self.logger.info(name.encode('ascii')) # debbuging message, delete later
+            self.logger.info(name.encode("ascii")) # debbuging message, delete later
             info = self.sock.recv(1024)
             self.logger.info("Information received, decoding...")
-            info_out = info.decode('ascii')
+            info_out = info.decode("ascii")
             print(info_out)
             return(info_out) 
          
