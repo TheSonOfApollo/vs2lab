@@ -63,6 +63,7 @@ class Server:
                         break
                     decodedData = data.decode('ascii')
                     decodedData.replace("b", "", 1) # remove "b" leftover from en-/decoding
+                    decodedData = decodedData.capitalize() # capitalize key so there are no key conflicts
                     self._logger.info("Decoding received message")
                     info = phoneNumbers[decodedData]
                     self._logger.info("Encoding...")
