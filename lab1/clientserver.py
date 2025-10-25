@@ -64,7 +64,7 @@ class Server:
                     decodedData = data.decode("ascii")
                     decodedData.replace("b", "", 1) # remove "b" leftover from en-/decoding
                     if decodedData == "---GET_ALL---": 
-                        self.handleAll(decodedData)
+                        self.handleAll(connection)
                     else:
                         self.handleGet(decodedData, connection)
                 connection.close()
@@ -88,12 +88,15 @@ class Server:
             self._logger.info("Sending info back!")                  
 
 
-    def handleAll(self, commandReceived): 
-        if commandReceived == "---GET_ALL---": 
-            print("congrats")
-        else:
-            pass
-        
+    def handleAll(self, connection):
+            closingMsg = "---FINISHED---"
+            self._logger.info("Sending all contacts...")
+            for contact in phoneNumbers: 
+                self.handleGet(contact, connection)
+            self._logger.info("All contacts have been sent!")
+            connection.send(closingMsg.encode("ascii"))
+            self._logger.info("Closing message has been sent")
+
 
 class Client:
     """ The client """
