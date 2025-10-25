@@ -142,10 +142,10 @@ class Client:
 
     def getAll(self): 
         command = "---GET_ALL---"
-        info = ""
+        info_out = ""
         self.sock.send(command.encode("ascii")) 
         self.logger.info("Requesting ALL contacts...")
-        while info != "---FINISHED---": 
+        while info_out != "---FINISHED---": 
             info = self.sock.recv(1024)
             info_out = info.decode("ascii")
             print(info_out)
