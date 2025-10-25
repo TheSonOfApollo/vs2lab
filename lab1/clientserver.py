@@ -63,24 +63,37 @@ class Server:
                         break
                     decodedData = data.decode("ascii")
                     decodedData.replace("b", "", 1) # remove "b" leftover from en-/decoding
-                    decodedData = decodedData.capitalize() # capitalize key so there are no key conflicts
-                    self._logger.info("Decoding received message")
-                    try: 
-                        info = phoneNumbers[decodedData]
-                    except:
-                        info = "no entry found"
-                        self._logger.info("Key not found!")
-                    finally: 
-                        self._logger.info("Encoding...")
-                        connection.send((decodedData + " : " + info).encode("ascii")) 
-                        self._logger.info("Sending info back!")
+                    if decodedData == "---GET_ALL---": 
+                        self.handleAll(decodedData)
+                    else:
+                        self.handleGet(decodedData, connection)
                 connection.close()
             except socket.timeout:
                 pass
         self.sock.close()
         self._logger.info("Connection closed")
-                    
+        
 
+    def handleGet(self, key, connection):
+        key = key.capitalize() # capitalize key so there are no key conflicts
+        self._logger.info("Decoding received message")
+        try: 
+            info = phoneNumbers[key]
+        except:
+            info = "no entry found"
+            self._logger.info("Key not found!")
+        finally: 
+            self._logger.info("Encoding...")
+            connection.send((key + " : " + info).encode("ascii")) 
+            self._logger.info("Sending info back!")                  
+
+
+    def handleAll(self, commandReceived): 
+        if commandReceived == "---GET_ALL---": 
+            print("congrats")
+        else:
+            pass
+        
 
 class Client:
     """ The client """
