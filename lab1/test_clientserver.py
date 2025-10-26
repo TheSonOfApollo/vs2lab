@@ -26,6 +26,7 @@ class TestEchoService(unittest.TestCase):
     def setUp(self):
         super().setUp()
         self.client = clientserver.Client()  # create new client for each test
+        self.maxDiff = None # uncap output for MAXIMUM DEBUGGING POWER 
 
     # def test_srv_get(self):  # each test_* function is a test
     #     """Test simple call"""
@@ -97,6 +98,28 @@ class TestEchoService(unittest.TestCase):
     def test_inexistentKey_get(self):
         msg = self.client.get("Cooper")
         self.assertEqual(msg, "Cooper : no entry found")
+
+    def test_simple_getAll(self):
+        expected_msg = textwrap.dedent("""\
+        Alice : +49 671 6367577
+        Bob : +49 459 5198552
+        Carol : +49 333 5796326
+        Carlos : +49 957 0269783
+        Charlie : +49 652 9647710
+        Chuck : +49 167 03932122
+        Chad : +49 569 0516213
+        Dave : +49 719 9898086
+        Eve : +49 667 1147029
+        Frank : +49 495 0041559
+        Grace : +49 197 9944048
+        ---FINISHED---
+        All contacts received successfully""")
+        f = io.StringIO()
+        with redirect_stdout(f): 
+            self.client.getAll()
+        output = f.getvalue().strip()
+        self.assertEqual(output, expected_msg)
+    
 
     def tearDown(self):
         self.client.close()  # terminate client after each test
