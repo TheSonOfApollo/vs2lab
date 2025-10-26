@@ -149,7 +149,7 @@ class Client:
             info = self.sock.recv(1024)
             info_out = info.decode("ascii")
             print(info_out)
-        print("All contacts received succesflully")
+        print("All contacts received succesffully")
         
          
     # def first(self):
