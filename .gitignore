@@ -284,6 +284,5 @@ $RECYCLE.BIN/
 
 *.zip
 .vscode/
-lab1/Server.ipynb
+*.ipynb
 lab1/notes.txt
-lab1/Client.ipynb
