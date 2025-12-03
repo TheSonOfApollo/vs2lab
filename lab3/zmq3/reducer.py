@@ -1,7 +1,7 @@
 import pickle
 import sys
 import zmq
-
+import time
 import constPipe
 
 
@@ -15,6 +15,7 @@ context = zmq.Context()
 
 pull_socket = context.socket(zmq.PULL)  # create a pull socket
 pull_socket.bind(address)  # connect to task source
+time.sleep(0.5)
 
 print(f"{me} started")
 

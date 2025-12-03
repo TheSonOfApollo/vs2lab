@@ -20,7 +20,8 @@ push_socket_1.connect(address_push_1)  # bind socket to address
 push_socket_2 = context.socket(zmq.PUSH)  # create a push socket
 push_socket_2.connect(address_push_2)  # bind socket to address
 
-
+# push_socket_1.setsockopt(zmq.SNDHWM, 0)
+# push_socket_2.setsockopt(zmq.SNDHWM, 0)
 
 print(f"{me} started")
 
@@ -38,12 +39,12 @@ while True:
             continue
 
         reducer_id = hash(word) % 2
-        if reducer_id > 0:
+        if reducer_id == 0:
             print(f"push {reducer_id}:", word)
-            #push_socket_2.send(pickle.dumps((me, word)))
+            push_socket_2.send(pickle.dumps((me, word)))
         else:
             print(f"push {reducer_id}:", word)
-            #push_socket_1.send(pickle.dumps((me, word)))
+            push_socket_1.send(pickle.dumps((me, word)))
 
 
 
