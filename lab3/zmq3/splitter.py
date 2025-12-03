@@ -9,7 +9,7 @@ prt = constPipe.SPLITTER_PORT
 with open("input2.txt") as f:
     t_raw = f.read()
 
-me = "splitter"
+me = "splitter" # name
 
 t_cleaned_up = ''.join(t_raw.splitlines()).replace(',', '')
 
