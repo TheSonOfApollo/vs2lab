@@ -4,7 +4,7 @@ import zmq
 import constPipe
 
 src = constPipe.SRC
-prt = constPipe.PORT1
+prt = constPipe.SPLITTER_PORT
 
 with open("Input.txt") as f:
     t_raw = f.read()

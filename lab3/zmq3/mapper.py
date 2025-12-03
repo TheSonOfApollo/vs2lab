@@ -4,7 +4,8 @@ import zmq
 
 import constPipe
 
-address_pull = "tcp://" + constPipe.SRC + ":" + constPipe.PORT1  # 1st task src
+address_pull = "tcp://" + constPipe.SRC + ":" + constPipe.SPLITTER_PORT  # all mappers connect to the same source  
+
 address_push_1 = "tcp://" + constPipe.SRC + ":" + constPipe.PORT2  # how and where to connect
 address_push_2 = "tcp://" + constPipe.SRC + ":" + constPipe.PORT3  # how and where to connect
 
