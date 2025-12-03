@@ -15,10 +15,10 @@ pull_socket = context.socket(zmq.PULL)  # create a pull socket
 pull_socket.connect(address_pull)  # connect to task source
 
 push_socket_1 = context.socket(zmq.PUSH)  # create a push socket
-push_socket_1.bind(address_push_1)  # bind socket to address
+push_socket_1.connect(address_push_1)  # bind socket to address
 
 push_socket_2 = context.socket(zmq.PUSH)  # create a push socket
-push_socket_2.bind(address_push_2)  # bind socket to address
+push_socket_2.connect(address_push_2)  # bind socket to address
 
 
 
